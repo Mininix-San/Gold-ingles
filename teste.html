@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Panel</title>
+    <style>
+        body {
+            background-image: url('https://r4.wallpaperflare.com/wallpaper/671/31/673/tv-show-star-vs-the-forces-of-evil-star-butterfly-wallpaper-a920088dc10a7dfbd63728bff031867d.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .panel {
+            width: 22%;
+            padding: 20px;
+            border: 2px solid #FF6EC7;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            margin: 20px;
+            display: inline-block;
+            vertical-align: top;
+            background-color: rgba(255, 255, 255, 0.9);
+            position: relative;
+        }
+        .payment-info {
+            width: 80%;
+            padding: 20px;
+            border: 2px solid #FF6EC7;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            margin: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            text-align: left;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #FF6EC7;
+        }
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 2px solid #FF6EC7;
+            border-radius: 5px;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+            color: #FF6EC7;
+        }
+        p {
+            margin: 10px 0;
+            padding: 0;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #FF6EC7;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+        }
+    </style>
+    <script>
+        let goldRateR = 32.50;
+        let goldRateD = 5.60;
+        let globalGoldList = [];
+
+        function updateGoldCalculations() {
+            const quantity = parseInt(document.getElementById('goldQuantity').value) || 0;
+            const totalR = (quantity / 1000) * goldRateR;
+            const totalD = (quantity / 1000) * goldRateD;
+            globalGoldList = calculateGoldList(quantity);
+
+            document.getElementById('totalRGold').innerText = totalR.toFixed(2);
+            document.getElementById('totalDGold').innerText = totalD.toFixed(2);
+            document.getElementById('announcedQuantity').innerText = globalGoldList.join(', ');
+        }
+
+        function calculateGoldList(quantity) {
+            const announcedQuantity = Math.floor(quantity + (quantity * 5.3 / 100));
+            if (quantity <= 2500) {
+                return [announcedQuantity];
+            } else if (quantity <= 5000) {
+                return divideIntoParts(announcedQuantity, 2);
+            } else if (quantity <= 7500) {
+                return divideIntoParts(announcedQuantity, 3);
+            } else if (quantity <= 10000) {
+                return divideIntoParts(announcedQuantity, 4);
+            } else {
+                return [announcedQuantity];
+            }
+        }
+
+        function divideIntoParts(total, parts) {
+            const min = Math.floor(total / (parts + 1));
+            const max = Math.ceil(total / parts);
+            let result = [];
+            let sum = 0;
+
+            for (let i = 0; i < parts - 1; i++) {
+                const value = Math.floor(Math.random() * (max - min + 1)) + min;
+                result.push(value);
+                sum += value;
+            }
+
+            result.push(total - sum);
+            return result;
+        }
+
+        function copyToClipboard() {
+            const totalR = document.getElementById('totalRGold').innerText;
+            const totalD = document.getElementById('totalDGold').innerText;
+            const announcedQuantity = document.getElementById('announcedQuantity').innerText;
+            const textToCopy = `Total in R$: ${totalR}\nTotal in $: ${totalD}\nGold quantity to announce: ${announcedQuantity}`;
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => alert('Totals copied to clipboard'))
+                .catch(err => alert('Error copying text: ', err));
+        }
+
+        window.onload = function() {
+            document.getElementById('goldQuantity').value = 0;
+            updateGoldCalculations();
+        }
+    </script>
+</head>
+<body>
+    <div class="panel">
+        <h2>Gold</h2>
+        <label for="goldQuantity">Gold Quantity:</label>
+        <input type="number" id="goldQuantity" value="0" oninput="updateGoldCalculations()"><br>
+        <p>Total in R$ = "R$<span id="totalRGold">0.00</span>"</p>
+        <p>Total in $ = "$<span id="totalDGold">0.00</span>"</p>
+        <p>Gold quantity to announce: <span id="announcedQuantity">0</span></p>
+        <button onclick="copyToClipboard()">Copy Totals</button>
+    </div>
+    <div class="payment-info">
+        <h2>Payment Information</h2>
+        <p><strong>Pix:</strong> CELL PHONE 14988231270 Name: Victoria Stefany</p>
+        <p><strong>Mercado Pago:</strong> <a href="https://link.mercadopago.com.br/ervindanada">https://link.mercadopago.com.br/ervindanada</a> price will be 6% more expensive.</p>
+        <p><strong>Binance:</strong> estrela203@hotmail.com</p>
+    </div>
+</body>
+</html>
